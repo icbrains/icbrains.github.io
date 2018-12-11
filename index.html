@@ -155,307 +155,29 @@
           <div id="js-content" class="content-ll">
             
   
-    <article id="post-socketAPI" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+    <article id="post-callback" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/12/11/socketAPI/">Linux网络编程API总结</a>
+      <a class="article-title" href="/2018/12/11/callback/">JavaScript的回调</a>
     </h1>
   
 
         
-        <a href="/2018/12/11/socketAPI/" class="archive-article-date">
-  	<time datetime="2018-12-11T05:47:44.617Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-11</time>
+        <a href="/2018/12/11/callback/" class="archive-article-date">
+  	<time datetime="2018-12-11T05:54:23.605Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-11</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="通用socket地址"><a href="#通用socket地址" class="headerlink" title="通用socket地址"></a>通用socket地址</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;bits/socket.h&gt;</span><br><span class="line">struct sockaddr</span><br><span class="line">&#123;</span><br><span class="line">  sa_family_t sa_family;</span><br><span class="line">  char sa_data[14];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="专用socket地址"><a href="#专用socket地址" class="headerlink" title="专用socket地址"></a>专用socket地址</h3><h6 id="unix本地域协议族专用socket地址结构体"><a href="#unix本地域协议族专用socket地址结构体" class="headerlink" title="unix本地域协议族专用socket地址结构体"></a>unix本地域协议族专用socket地址结构体</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;sys/un.h&gt;</span><br><span class="line">struct sockaddr_un</span><br><span class="line">&#123;</span><br><span class="line">  sa_family_t sin_family;</span><br><span class="line">  char sun_path [108];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h6 id="TCP-IP协议族的专用socket地址IPV4"><a href="#TCP-IP协议族的专用socket地址IPV4" class="headerlink" title="TCP/IP协议族的专用socket地址IPV4"></a>TCP/IP协议族的专用socket地址IPV4</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">struct sockaddr_in</span><br><span class="line">&#123;</span><br><span class="line">  sa_family_t sin_family;</span><br><span class="line">  u_int16_t sin_port;</span><br><span class="line">  struct in_addr sin_addr;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">struct sin_addr</span><br><span class="line">&#123;</span><br><span class="line">  u_int32_t s_addr;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<h6 id="TCP-IP协议族的专用socket地址IPV6"><a href="#TCP-IP协议族的专用socket地址IPV6" class="headerlink" title="TCP/IP协议族的专用socket地址IPV6"></a>TCP/IP协议族的专用socket地址IPV6</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">struct sockaddr_in6</span><br><span class="line">&#123;</span><br><span class="line">  sa_family_t sin6_family;</span><br><span class="line">  u_int16_t sin6_port;</span><br><span class="line">  u_int32_t sin6_flowinfo;</span><br><span class="line">  struct int6_addr sin6_addr;</span><br><span class="line">  u_int32_t sin6_scope_id;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">struct in6s_addr</span><br><span class="line">&#123;</span><br><span class="line">  unsinged char sa_addr[16];</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<h3 id="IP地址转换函数"><a href="#IP地址转换函数" class="headerlink" title="IP地址转换函数"></a>IP地址转换函数</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;arpa/inet.h&gt;</span><br><span class="line">//将用点分十进制字符串表示的IPV4地址转化为网络字节序整数表示的IPV4</span><br><span class="line">in_addr_t inet_addr( const char* strptr );</span><br><span class="line">int inet_aton ( const char* cp,struct in_addr* inp );</span><br><span class="line">char* inet_ntoa ( struct in_addr in );</span><br></pre></td></tr></table></figure>
-<h3 id="创建socket的API"><a href="#创建socket的API" class="headerlink" title="创建socket的API"></a>创建socket的API</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;sys/types.h&gt;</span><br><span class="line">#include &lt;sys/socket.h&gt;</span><br><span class="line">int socket( int domain, int type, int protocol );</span><br></pre></td></tr></table></figure>
-<h3 id="命名socket"><a href="#命名socket" class="headerlink" title="命名socket"></a>命名socket</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;sys/types.h&gt;</span><br><span class="line">#include &lt;sys/socket.h&gt;</span><br><span class="line">int bind ( int sockfd, const struct sockaddr* my_addr, socklen_t addrlen );</span><br></pre></td></tr></table></figure>
-<h3 id="监听socket"><a href="#监听socket" class="headerlink" title="监听socket"></a>监听socket</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;sys/socket.h&gt;</span><br><span class="line">int listen ( int sockfd, int backlog );</span><br></pre></td></tr></table></figure>
-<h3 id="接受连接"><a href="#接受连接" class="headerlink" title="接受连接"></a>接受连接</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;sys/types.h&gt;</span><br><span class="line">#include &lt;sys/socket.h&gt;</span><br><span class="line">int accept( int sockfd, sockaddr* addr, socklen_t*addrlen);</span><br></pre></td></tr></table></figure>
-<h3 id="发起连接【一般表示socket客户端的行为】"><a href="#发起连接【一般表示socket客户端的行为】" class="headerlink" title="发起连接【一般表示socket客户端的行为】"></a>发起连接【一般表示socket客户端的行为】</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;sys/types.h&gt;</span><br><span class="line">#include &lt;sys/socket.h&gt;</span><br><span class="line">sockfd：socket系统调用返回一个socket</span><br><span class="line">serv_addr：服务器监听的socket地址</span><br><span class="line">addrlen：指定这个地址的长度</span><br><span class="line">int connect (int sockfd, const struct sockaddr* serv_addr, socklen_t addrlen );</span><br></pre></td></tr></table></figure>
-<h3 id="关闭连接"><a href="#关闭连接" class="headerlink" title="关闭连接"></a>关闭连接</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line">int close ( int fd );</span><br></pre></td></tr></table></figure>
-<h3 id="数据读写"><a href="#数据读写" class="headerlink" title="数据读写"></a>数据读写</h3><h6 id="TCP数据读写"><a href="#TCP数据读写" class="headerlink" title="TCP数据读写"></a>TCP数据读写</h6><p>对文件的读写操作read和write同样适用于socket<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;sys/types.h&gt;</span><br><span class="line">#include &lt;sys/socket.h&gt;</span><br><span class="line">ssize_t recv ( int sockfd, void* buf, ssize_t len, int flags );</span><br><span class="line">ssize_t send ( int sockfd, const void* buf, size_t len, int flags );</span><br></pre></td></tr></table></figure></p>
-<h6 id="UDP数据读写"><a href="#UDP数据读写" class="headerlink" title="UDP数据读写"></a>UDP数据读写</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;sys/types.h&gt;</span><br><span class="line">#include &lt;sys/socket.h&gt;</span><br><span class="line">ssize_t recvfrom ( int sockfd, void* buf, size_t len, int flag, struct sockaddr* src_addr, socklen_t* addrlen );</span><br><span class="line">ssize_t sendto( int sockfd, const void* buf, size_t len, int flags, const struct sockaddr* dest_addr, socklen_t addrlen );</span><br></pre></td></tr></table></figure>
-<h3 id="通用数据读写函数"><a href="#通用数据读写函数" class="headerlink" title="通用数据读写函数"></a>通用数据读写函数</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;sys/socket.h&gt;</span><br><span class="line">ssize_t recvmsg ( int sockfd, struct msghdr* msg, int flags );</span><br><span class="line">ssize_t sendmsg ( int sockfd, struct msghdr* msg, int flags );</span><br></pre></td></tr></table></figure>
-<h6 id="msghdr结构体的定义"><a href="#msghdr结构体的定义" class="headerlink" title="msghdr结构体的定义"></a>msghdr结构体的定义</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">struct msghdr</span><br><span class="line">&#123;</span><br><span class="line">  void* msg_name;             /* socket 地址 */</span><br><span class="line">  socklen_t msg_namelen;      /* socket 地址的长度 */</span><br><span class="line">  struct iovec* msg_iov;      /* 分散的内存块 */</span><br><span class="line">  int msg_iovlen;             /* 分散内存块的数量 */</span><br><span class="line">  void* msg_control;          /* 指向辅助数据的起始位置 */</span><br><span class="line">  socklen_t msg_controllen;   /* 辅助数据的大小 */</span><br><span class="line">  int msg_flags;              /* 复制函数中的flags参数， 并在调用过程中更新 */</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<h6 id="iovec-结构体的定义"><a href="#iovec-结构体的定义" class="headerlink" title="iovec 结构体的定义"></a>iovec 结构体的定义</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">struct iovec</span><br><span class="line">&#123;</span><br><span class="line">  void* iov_base;</span><br><span class="line">  size_t iov_len;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<h3 id="外带数据"><a href="#外带数据" class="headerlink" title="外带数据"></a>外带数据</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;sys/socket.h&gt;</span><br><span class="line">int sockatmark ( int sockfd );</span><br></pre></td></tr></table></figure>
-<h3 id="地址信息函数"><a href="#地址信息函数" class="headerlink" title="地址信息函数"></a>地址信息函数</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;sys/socket.h&gt;</span><br><span class="line">/* 获取sockfd对应的本端socket地址 */</span><br><span class="line">int getsockname ( int sockfd, struct sockaddr* address, socklen_t* address_len );</span><br><span class="line">/* 获取sockfd对应的远端socket地址 */</span><br><span class="line">int getpeername ( int sockfd, struct sockaddr* address, socklen_t* address_len );</span><br></pre></td></tr></table></figure>
-<h3 id="socket选项"><a href="#socket选项" class="headerlink" title="socket选项"></a>socket选项</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;sys/socket.h&gt;</span><br><span class="line">int getsockopt( int sockfd, int level, int option_name, void* option_value );</span><br><span class="line">int setsockopt( int sockfd, int level, int option_name, const void* option_value, socklen_t option_len );</span><br></pre></td></tr></table></figure>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">网络编程</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/12/11/socketAPI/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-protocol" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/12/11/protocol/">常见的几种传输层协议和应用层协议</a>
-    </h1>
-  
-
-        
-        <a href="/2018/12/11/protocol/" class="archive-article-date">
-  	<time datetime="2018-12-11T05:47:44.609Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="TCP协议"><a href="#TCP协议" class="headerlink" title="TCP协议"></a>TCP协议</h3><h3 id="UDP协议"><a href="#UDP协议" class="headerlink" title="UDP协议"></a>UDP协议</h3><h3 id="http协议"><a href="#http协议" class="headerlink" title="http协议"></a>http协议</h3><h3 id="https协议"><a href="#https协议" class="headerlink" title="https协议"></a>https协议</h3><h3 id="websocket协议"><a href="#websocket协议" class="headerlink" title="websocket协议"></a>websocket协议</h3><h3 id="websocket-ssl协议"><a href="#websocket-ssl协议" class="headerlink" title="websocket ssl协议"></a>websocket ssl协议</h3><h3 id="socket-io-协议"><a href="#socket-io-协议" class="headerlink" title="socket.io 协议"></a>socket.io 协议</h3><h3 id="socket-io-ssl-协议"><a href="#socket-io-ssl-协议" class="headerlink" title="socket.io ssl 协议"></a>socket.io ssl 协议</h3><h3 id="mqtt协议"><a href="#mqtt协议" class="headerlink" title="mqtt协议"></a>mqtt协议</h3>
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">TCP</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">UDP</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">http</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">https</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">websocket</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">websocket ss</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">socket.io</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">socket.io ss</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">mqtt</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/12/11/protocol/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-protobuf" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/12/11/protobuf/">protobuf的使用</a>
-    </h1>
-  
-
-        
-        <a href="/2018/12/11/protobuf/" class="archive-article-date">
-  	<time datetime="2018-12-11T05:47:44.601Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><h3 id="消息类型"><a href="#消息类型" class="headerlink" title="消息类型"></a>消息类型</h3><ul>
-<li>required</li>
-<li>optional</li>
-<li>repeated</li>
-</ul>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">protobuf</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/12/11/protobuf/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-promise" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/12/11/promise/">ES6标准中的Promise</a>
-    </h1>
-  
-
-        
-        <a href="/2018/12/11/promise/" class="archive-article-date">
-  	<time datetime="2018-12-11T05:47:44.597Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="声明：关于ES6的一些知识都是参考于阮一峰老师的"><a href="#声明：关于ES6的一些知识都是参考于阮一峰老师的" class="headerlink" title="声明：关于ES6的一些知识都是参考于阮一峰老师的"></a>声明：关于ES6的一些知识都是参考于阮一峰老师的</h2><h3 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h3><p>Promise是异步编程的一种”解决方案”</p>
-<p>Promise是一个容器，里面保存着某个未来才会发生的事件的结果；这个事件一般是一个异步事件</p>
+        <a id="more"></a>
+<h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><p>回调函数：将一个函数作为参数传给另一个函数</p>
+<p>eg：define fun1()，fun2;<br>function(fun1);</p>
 
       
 
@@ -473,11 +195,7 @@
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">es6</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">promise</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">回调</a>
         		</li>
       		
 		</ul>
@@ -487,7 +205,290 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2018/12/11/promise/">展开全文 >></a>
+          <a class="article-more-a" href="/2018/12/11/callback/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-hello-world" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/12/11/hello-world/">欢迎大家！</a>
+    </h1>
+  
+
+        
+        <a href="/2018/12/11/hello-world/" class="archive-article-date">
+  	<time datetime="2018-12-11T05:54:20.533Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-11</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <a id="more"></a>
+<h3 id="第一篇按照惯例闲谈"><a href="#第一篇按照惯例闲谈" class="headerlink" title="第一篇按照惯例闲谈"></a>第一篇按照惯例闲谈</h3><p>这次我将自己的博客从腾讯云迁移到GitHub上面，博客也由WordPress换成Hexo了，根据工作时间的安排，可能每周会更新一些自己以前写过的博客，接下来就是闲谈一哈！</p>
+<h3 id="开发环境篇"><a href="#开发环境篇" class="headerlink" title="开发环境篇"></a>开发环境篇</h3><p>操作系统： Linux</p>
+<p>常用的IDE： Eclipse、Webstorm</p>
+<p>文本编辑器： Atom 、VIM</p>
+<p>语言方面： C++ 、nodejs</p>
+<p>本版控制： SVN、GIT</p>
+<p>因为本人主要是做服务器开发工作的，所以用Linux居多，而且Linux对我的感觉就是快，逼格高，对技术以及自身素质提升比较快；IDE就不需要BB了，对于文本编辑器来说，自我感觉Atom已经很高大上了，而且是【免费的】，我还是比较现实的，VIM多用在远程连接操作，本地开发很少用的！语言方面的话主要是C++，不过做过大半年的nodejs游戏服务器开发，用的是网易开源的pomelo，其他像PHP、Java[在大学期间学的就是它]、Python都有涉猎，不过一般是现用现查；</p>
+<h3 id="福利篇"><a href="#福利篇" class="headerlink" title="福利篇"></a>福利篇</h3><p>自己掏腰包买了个VPS，有网友需要科学上网的可以找我，免费提供一个上网账号，因为一个月500G流量太多了，一个人用简直是浪费，可能有的朋友猜出来了是搬瓦工，没错就是它，因为主要是用来平时查资料，所以速度还是很可观的，关键是便宜！</p>
+<p>有需要的戳我<a href="mailto:1113938026@qq.com" target="_blank" rel="noopener">邮箱</a>；</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+        <div class="article-pop-out tagcloud">
+          <i class="icon-tuding"></i>
+          <a class="article-tag-list-link color3">置顶</a>
+        </div>
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">开篇</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">随笔</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/12/11/hello-world/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-note" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/12/11/note/">笔记</a>
+    </h1>
+  
+
+        
+        <a href="/2018/12/11/note/" class="archive-article-date">
+  	<time datetime="2018-12-11T05:54:16.497Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-11</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <a id="more"></a>
+<h3 id="vs-和vc版本对应关系"><a href="#vs-和vc版本对应关系" class="headerlink" title="vs 和vc版本对应关系"></a>vs 和vc版本对应关系</h3><p>Visual Studio    6 ： vc6</p>
+<p>Visual Studio 2003 ： vc7</p>
+<p>Visual Studio 2005 ： vc8</p>
+<p>Visual Studio 2008 ： vc9</p>
+<p>Visual Studio 2010 ： vc10</p>
+<p>Visual Studio 2012 ： vc11</p>
+<p>Visual Studio 2013 ： vc12</p>
+<p>Visual Studio 2015 ： vc14</p>
+<p>Visual Studio 2017 ： vc15</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">note</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/12/11/note/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-pointerknowage" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/12/11/pointerknowage/">指针篇</a>
+    </h1>
+  
+
+        
+        <a href="/2018/12/11/pointerknowage/" class="archive-article-date">
+  	<time datetime="2018-12-11T05:54:15.269Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-11</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <a id="more"></a>
+<h3 id="指针常见的错误"><a href="#指针常见的错误" class="headerlink" title="指针常见的错误"></a>指针常见的错误</h3><p>1 内存泄漏</p>
+<p>造成内存泄漏的几种情况：</p>
+<p>①通过c语言的malloc系统函数以及c++的new运算符动态内配的内存空间，使用完之后程序员没有手动释放！<br>②在有异常处理的程序中，即时使用了free或者delete但是由于异常的原因没有得到执行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">/* 这里提供一段伪代码 */</span><br><span class="line">try&#123;</span><br><span class="line">  type* pointer = malloc(sizeof(type));</span><br><span class="line">  //此处抛出异常</span><br><span class="line">  free(pointer);  //这里不会执行</span><br><span class="line">&#125;catch(...)&#123;</span><br><span class="line">  //捕捉到异常</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>2 野指针的使用</p>
+<p>基本概念：野指针指的是指向”垃圾”内存的指针</p>
+<p>指针变成野指针的情况概述：</p>
+<p>①free或者delete之后的指针，free和delete只是释放了该指针指向的内存空间，”但是该指针的值还是malloc或者new分配的内存的地址”，继续使用它去访问这个内存地址是会发生错误的！</p>
+<p>注意：当释放掉动态内存空间之后，将先前指向它的指针的值设置为NULL；在创建指针变量的时候，给指针一个初始值，因为不指定初始值的话，指针的值是随机的，这有时候会导致不可预期的错误！</p>
+<p>建议：定义指针变量的时候尽量初始化，哪怕初始化为NULL也好；这是一个很好的编程习惯！</p>
+<p>②将局部变量的地址返回</p>
+<p>出现的问题：因为a是局部变量，只有在func函数作用域中有效，它的内存空间是属于栈内存的，一旦func执行完之后，系统会自动回收它的内存空间，所以再次使用的话会发生错误！</p>
+<p>解决方法：将局部变量使用static修饰，因为在c++中，static修饰的变量的生命周期是整个程序运行期间，与程序”同生共死”；<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">int* func()&#123;</span><br><span class="line">  int a = 8;</span><br><span class="line">  return &amp;a;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main()&#123;</span><br><span class="line">  int* p = func();</span><br><span class="line">  cout&lt;&lt;&quot;p:&quot;&lt;&lt;*p&lt;&lt;&quot;\n&quot;;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>3 NULL指针</p>
+<p>出现NULL指针的情况</p>
+<p>①使用malloc或者new动态分配内存的时候：</p>
+<p>对于malloc和new来说，当内存分配失败的时候回返回NULL，所以如果不做判断的话就会发生错误；</p>
+<p>②当使用指针作为函数的参数的时候：</p>
+<p>对于含有指针参数的函数来说，当使用者传入一个NULL的指针的话也是会发生错误的；</p>
+<p>注意：为了避免以上两种情况的发生，我们再程序中加一个if判断<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">if (pointer == NULL)</span><br><span class="line">  停止执行任务</span><br></pre></td></tr></table></figure></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">cpp</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">c++知识点</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/c-c-基础知识//" class="article-tag-list-link color5">c/c++基础知识</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/12/11/pointerknowage/">展开全文 >></a>
         </p>
       
 
@@ -530,14 +531,15 @@
 
         
         <a href="/2018/12/11/pomelo/" class="archive-article-date">
-  	<time datetime="2018-12-11T05:47:44.589Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-11</time>
+  	<time datetime="2018-12-11T05:54:14.013Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-11</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="与客户端的通信"><a href="#与客户端的通信" class="headerlink" title="与客户端的通信"></a>与客户端的通信</h3><ul>
+        <a id="more"></a>
+<h3 id="与客户端的通信"><a href="#与客户端的通信" class="headerlink" title="与客户端的通信"></a>与客户端的通信</h3><ul>
 <li>涉及到的组件介绍</li>
 </ul>
 <p>session 组件是sessionService的包装组件，用来维护用户的session信息；</p>
@@ -636,14 +638,15 @@
 
         
         <a href="/2018/12/11/pomelo1/" class="archive-article-date">
-  	<time datetime="2018-12-11T05:47:44.585Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-11</time>
+  	<time datetime="2018-12-11T05:54:12.793Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-11</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p> [TOC]</p>
+        <a id="more"></a>
+<p> [TOC]</p>
 <h3 id="pomelo提供的服务器连接认证机制"><a href="#pomelo提供的服务器连接认证机制" class="headerlink" title="pomelo提供的服务器连接认证机制"></a>pomelo提供的服务器连接认证机制</h3><p>官方代码如下：</p>
 <p>代码<a href="https://github.com/NetEase/pomelo-admin/blob/master/lib/util/utils.js#L117" target="_blank" rel="noopener">见这里</a></p>
 <p>[TOC]</p>
@@ -721,288 +724,20 @@
 
 
   
-    <article id="post-pointerknowage" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+    <article id="post-promise" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2018/12/11/pointerknowage/">指针篇</a>
+      <a class="article-title" href="/2018/12/11/promise/">ES6标准中的Promise</a>
     </h1>
   
 
         
-        <a href="/2018/12/11/pointerknowage/" class="archive-article-date">
-  	<time datetime="2018-12-11T05:47:44.585Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="指针常见的错误"><a href="#指针常见的错误" class="headerlink" title="指针常见的错误"></a>指针常见的错误</h3><p>1 内存泄漏</p>
-<p>造成内存泄漏的几种情况：</p>
-<p>①通过c语言的malloc系统函数以及c++的new运算符动态内配的内存空间，使用完之后程序员没有手动释放！<br>②在有异常处理的程序中，即时使用了free或者delete但是由于异常的原因没有得到执行<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">/* 这里提供一段伪代码 */</span><br><span class="line">try&#123;</span><br><span class="line">  type* pointer = malloc(sizeof(type));</span><br><span class="line">  //此处抛出异常</span><br><span class="line">  free(pointer);  //这里不会执行</span><br><span class="line">&#125;catch(...)&#123;</span><br><span class="line">  //捕捉到异常</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>2 野指针的使用</p>
-<p>基本概念：野指针指的是指向”垃圾”内存的指针</p>
-<p>指针变成野指针的情况概述：</p>
-<p>①free或者delete之后的指针，free和delete只是释放了该指针指向的内存空间，”但是该指针的值还是malloc或者new分配的内存的地址”，继续使用它去访问这个内存地址是会发生错误的！</p>
-<p>注意：当释放掉动态内存空间之后，将先前指向它的指针的值设置为NULL；在创建指针变量的时候，给指针一个初始值，因为不指定初始值的话，指针的值是随机的，这有时候会导致不可预期的错误！</p>
-<p>建议：定义指针变量的时候尽量初始化，哪怕初始化为NULL也好；这是一个很好的编程习惯！</p>
-<p>②将局部变量的地址返回</p>
-<p>出现的问题：因为a是局部变量，只有在func函数作用域中有效，它的内存空间是属于栈内存的，一旦func执行完之后，系统会自动回收它的内存空间，所以再次使用的话会发生错误！</p>
-<p>解决方法：将局部变量使用static修饰，因为在c++中，static修饰的变量的生命周期是整个程序运行期间，与程序”同生共死”；<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">int* func()&#123;</span><br><span class="line">  int a = 8;</span><br><span class="line">  return &amp;a;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">int main()&#123;</span><br><span class="line">  int* p = func();</span><br><span class="line">  cout&lt;&lt;&quot;p:&quot;&lt;&lt;*p&lt;&lt;&quot;\n&quot;;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>3 NULL指针</p>
-<p>出现NULL指针的情况</p>
-<p>①使用malloc或者new动态分配内存的时候：</p>
-<p>对于malloc和new来说，当内存分配失败的时候回返回NULL，所以如果不做判断的话就会发生错误；</p>
-<p>②当使用指针作为函数的参数的时候：</p>
-<p>对于含有指针参数的函数来说，当使用者传入一个NULL的指针的话也是会发生错误的；</p>
-<p>注意：为了避免以上两种情况的发生，我们再程序中加一个if判断<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">if (pointer == NULL)</span><br><span class="line">  停止执行任务</span><br></pre></td></tr></table></figure></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">cpp</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">c++知识点</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/c-c-基础知识//" class="article-tag-list-link color5">c/c++基础知识</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/12/11/pointerknowage/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-note" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/12/11/note/">笔记</a>
-    </h1>
-  
-
-        
-        <a href="/2018/12/11/note/" class="archive-article-date">
-  	<time datetime="2018-12-11T05:47:44.541Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="vs-和vc版本对应关系"><a href="#vs-和vc版本对应关系" class="headerlink" title="vs 和vc版本对应关系"></a>vs 和vc版本对应关系</h3><p>Visual Studio    6 ： vc6</p>
-<p>Visual Studio 2003 ： vc7</p>
-<p>Visual Studio 2005 ： vc8</p>
-<p>Visual Studio 2008 ： vc9</p>
-<p>Visual Studio 2010 ： vc10</p>
-<p>Visual Studio 2012 ： vc11</p>
-<p>Visual Studio 2013 ： vc12</p>
-<p>Visual Studio 2015 ： vc14</p>
-<p>Visual Studio 2017 ： vc15</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">note</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/12/11/note/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-callback" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/12/11/callback/">JavaScript的回调</a>
-    </h1>
-  
-
-        
-        <a href="/2018/12/11/callback/" class="archive-article-date">
-  	<time datetime="2018-12-11T05:47:44.465Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-11</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><p>回调函数：将一个函数作为参数传给另一个函数</p>
-<p>eg：define fun1()，fun2;<br>function(fun1);</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">javascript</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">回调</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/12/11/callback/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-asyncForjs" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/12/11/asyncForjs/">JavaScript中的同步、异步编程</a>
-    </h1>
-  
-
-        
-        <a href="/2018/12/11/asyncForjs/" class="archive-article-date">
-  	<time datetime="2018-12-11T05:47:44.457Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-11</time>
+        <a href="/2018/12/11/promise/" class="archive-article-date">
+  	<time datetime="2018-12-11T05:54:11.373Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-11</time>
 </a>
         
       </header>
@@ -1010,20 +745,8 @@
     <div class="article-entry" itemprop="articleBody">
       
         <a id="more"></a>
-<h3 id="同步"><a href="#同步" class="headerlink" title="同步"></a>同步</h3><p>所有的事件是按照顺序执行的，后面的任务只能等待前面的任务弯沉之后才能够执行，同步其实就是链式执行；</p>
-<h3 id="异步"><a href="#异步" class="headerlink" title="异步"></a>异步</h3><p>异步表示消息不是按照先后顺序去执行，当一个函数收到一个执行消息之后，它可能需要很长一段时间才能执行完毕，如果是同步的话，后面的任务就只能一直等待，直到前面的任务完后，有可能造成了假死现象，但是使用异步的话就不会出现这样的事情，异步的话处理逻辑的过程和返回结果的过程是分开的，并不会影响后续任务的继续执行。</p>
-<h3 id="JavaScript中异步的实现方案"><a href="#JavaScript中异步的实现方案" class="headerlink" title="JavaScript中异步的实现方案"></a>JavaScript中异步的实现方案</h3><ul>
-<li>回调函数</li>
-</ul>
-<ul>
-<li>事件监听</li>
-</ul>
-<ul>
-<li>订阅者模式:subscribe/publis</li>
-</ul>
-<ul>
-<li>Promise</li>
-</ul>
+<h2 id="声明：关于ES6的一些知识都是参考于阮一峰老师的"><a href="#声明：关于ES6的一些知识都是参考于阮一峰老师的" class="headerlink" title="声明：关于ES6的一些知识都是参考于阮一峰老师的"></a>声明：关于ES6的一些知识都是参考于阮一峰老师的</h2><h3 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h3><p>Promise是异步编程的一种”解决方案”</p>
+<p>Promise是一个容器，里面保存着某个未来才会发生的事件的结果；这个事件一般是一个异步事件</p>
 
       
 
@@ -1041,11 +764,11 @@
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">异步</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">es6</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">同步</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">promise</a>
         		</li>
       		
 		</ul>
@@ -1055,7 +778,289 @@
 
       
         <p class="article-more-link">
-          <a class="article-more-a" href="/2018/12/11/asyncForjs/">展开全文 >></a>
+          <a class="article-more-a" href="/2018/12/11/promise/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-protobuf" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/12/11/protobuf/">protobuf的使用</a>
+    </h1>
+  
+
+        
+        <a href="/2018/12/11/protobuf/" class="archive-article-date">
+  	<time datetime="2018-12-11T05:54:10.217Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-11</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <a id="more"></a>
+<h3 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h3><h3 id="消息类型"><a href="#消息类型" class="headerlink" title="消息类型"></a>消息类型</h3><ul>
+<li>required</li>
+<li>optional</li>
+<li>repeated</li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">protobuf</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/12/11/protobuf/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-protocol" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/12/11/protocol/">常见的几种传输层协议和应用层协议</a>
+    </h1>
+  
+
+        
+        <a href="/2018/12/11/protocol/" class="archive-article-date">
+  	<time datetime="2018-12-11T05:54:09.145Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-11</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <a id="more"></a>
+<h3 id="TCP协议"><a href="#TCP协议" class="headerlink" title="TCP协议"></a>TCP协议</h3><h3 id="UDP协议"><a href="#UDP协议" class="headerlink" title="UDP协议"></a>UDP协议</h3><h3 id="http协议"><a href="#http协议" class="headerlink" title="http协议"></a>http协议</h3><h3 id="https协议"><a href="#https协议" class="headerlink" title="https协议"></a>https协议</h3><h3 id="websocket协议"><a href="#websocket协议" class="headerlink" title="websocket协议"></a>websocket协议</h3><h3 id="websocket-ssl协议"><a href="#websocket-ssl协议" class="headerlink" title="websocket ssl协议"></a>websocket ssl协议</h3><h3 id="socket-io-协议"><a href="#socket-io-协议" class="headerlink" title="socket.io 协议"></a>socket.io 协议</h3><h3 id="socket-io-ssl-协议"><a href="#socket-io-ssl-协议" class="headerlink" title="socket.io ssl 协议"></a>socket.io ssl 协议</h3><h3 id="mqtt协议"><a href="#mqtt协议" class="headerlink" title="mqtt协议"></a>mqtt协议</h3>
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">TCP</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">UDP</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">http</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">https</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">websocket</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">websocket ss</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">socket.io</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">socket.io ss</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">mqtt</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/12/11/protocol/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-socketAPI" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/12/11/socketAPI/">Linux网络编程API总结</a>
+    </h1>
+  
+
+        
+        <a href="/2018/12/11/socketAPI/" class="archive-article-date">
+  	<time datetime="2018-12-11T05:54:05.617Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-11</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <a id="more"></a>
+<h3 id="通用socket地址"><a href="#通用socket地址" class="headerlink" title="通用socket地址"></a>通用socket地址</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;bits/socket.h&gt;</span><br><span class="line">struct sockaddr</span><br><span class="line">&#123;</span><br><span class="line">  sa_family_t sa_family;</span><br><span class="line">  char sa_data[14];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="专用socket地址"><a href="#专用socket地址" class="headerlink" title="专用socket地址"></a>专用socket地址</h3><h6 id="unix本地域协议族专用socket地址结构体"><a href="#unix本地域协议族专用socket地址结构体" class="headerlink" title="unix本地域协议族专用socket地址结构体"></a>unix本地域协议族专用socket地址结构体</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;sys/un.h&gt;</span><br><span class="line">struct sockaddr_un</span><br><span class="line">&#123;</span><br><span class="line">  sa_family_t sin_family;</span><br><span class="line">  char sun_path [108];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h6 id="TCP-IP协议族的专用socket地址IPV4"><a href="#TCP-IP协议族的专用socket地址IPV4" class="headerlink" title="TCP/IP协议族的专用socket地址IPV4"></a>TCP/IP协议族的专用socket地址IPV4</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">struct sockaddr_in</span><br><span class="line">&#123;</span><br><span class="line">  sa_family_t sin_family;</span><br><span class="line">  u_int16_t sin_port;</span><br><span class="line">  struct in_addr sin_addr;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">struct sin_addr</span><br><span class="line">&#123;</span><br><span class="line">  u_int32_t s_addr;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h6 id="TCP-IP协议族的专用socket地址IPV6"><a href="#TCP-IP协议族的专用socket地址IPV6" class="headerlink" title="TCP/IP协议族的专用socket地址IPV6"></a>TCP/IP协议族的专用socket地址IPV6</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">struct sockaddr_in6</span><br><span class="line">&#123;</span><br><span class="line">  sa_family_t sin6_family;</span><br><span class="line">  u_int16_t sin6_port;</span><br><span class="line">  u_int32_t sin6_flowinfo;</span><br><span class="line">  struct int6_addr sin6_addr;</span><br><span class="line">  u_int32_t sin6_scope_id;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">struct in6s_addr</span><br><span class="line">&#123;</span><br><span class="line">  unsinged char sa_addr[16];</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="IP地址转换函数"><a href="#IP地址转换函数" class="headerlink" title="IP地址转换函数"></a>IP地址转换函数</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;arpa/inet.h&gt;</span><br><span class="line">//将用点分十进制字符串表示的IPV4地址转化为网络字节序整数表示的IPV4</span><br><span class="line">in_addr_t inet_addr( const char* strptr );</span><br><span class="line">int inet_aton ( const char* cp,struct in_addr* inp );</span><br><span class="line">char* inet_ntoa ( struct in_addr in );</span><br></pre></td></tr></table></figure>
+<h3 id="创建socket的API"><a href="#创建socket的API" class="headerlink" title="创建socket的API"></a>创建socket的API</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;sys/types.h&gt;</span><br><span class="line">#include &lt;sys/socket.h&gt;</span><br><span class="line">int socket( int domain, int type, int protocol );</span><br></pre></td></tr></table></figure>
+<h3 id="命名socket"><a href="#命名socket" class="headerlink" title="命名socket"></a>命名socket</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;sys/types.h&gt;</span><br><span class="line">#include &lt;sys/socket.h&gt;</span><br><span class="line">int bind ( int sockfd, const struct sockaddr* my_addr, socklen_t addrlen );</span><br></pre></td></tr></table></figure>
+<h3 id="监听socket"><a href="#监听socket" class="headerlink" title="监听socket"></a>监听socket</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;sys/socket.h&gt;</span><br><span class="line">int listen ( int sockfd, int backlog );</span><br></pre></td></tr></table></figure>
+<h3 id="接受连接"><a href="#接受连接" class="headerlink" title="接受连接"></a>接受连接</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;sys/types.h&gt;</span><br><span class="line">#include &lt;sys/socket.h&gt;</span><br><span class="line">int accept( int sockfd, sockaddr* addr, socklen_t*addrlen);</span><br></pre></td></tr></table></figure>
+<h3 id="发起连接【一般表示socket客户端的行为】"><a href="#发起连接【一般表示socket客户端的行为】" class="headerlink" title="发起连接【一般表示socket客户端的行为】"></a>发起连接【一般表示socket客户端的行为】</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;sys/types.h&gt;</span><br><span class="line">#include &lt;sys/socket.h&gt;</span><br><span class="line">sockfd：socket系统调用返回一个socket</span><br><span class="line">serv_addr：服务器监听的socket地址</span><br><span class="line">addrlen：指定这个地址的长度</span><br><span class="line">int connect (int sockfd, const struct sockaddr* serv_addr, socklen_t addrlen );</span><br></pre></td></tr></table></figure>
+<h3 id="关闭连接"><a href="#关闭连接" class="headerlink" title="关闭连接"></a>关闭连接</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line">int close ( int fd );</span><br></pre></td></tr></table></figure>
+<h3 id="数据读写"><a href="#数据读写" class="headerlink" title="数据读写"></a>数据读写</h3><h6 id="TCP数据读写"><a href="#TCP数据读写" class="headerlink" title="TCP数据读写"></a>TCP数据读写</h6><p>对文件的读写操作read和write同样适用于socket<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;sys/types.h&gt;</span><br><span class="line">#include &lt;sys/socket.h&gt;</span><br><span class="line">ssize_t recv ( int sockfd, void* buf, ssize_t len, int flags );</span><br><span class="line">ssize_t send ( int sockfd, const void* buf, size_t len, int flags );</span><br></pre></td></tr></table></figure></p>
+<h6 id="UDP数据读写"><a href="#UDP数据读写" class="headerlink" title="UDP数据读写"></a>UDP数据读写</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;sys/types.h&gt;</span><br><span class="line">#include &lt;sys/socket.h&gt;</span><br><span class="line">ssize_t recvfrom ( int sockfd, void* buf, size_t len, int flag, struct sockaddr* src_addr, socklen_t* addrlen );</span><br><span class="line">ssize_t sendto( int sockfd, const void* buf, size_t len, int flags, const struct sockaddr* dest_addr, socklen_t addrlen );</span><br></pre></td></tr></table></figure>
+<h3 id="通用数据读写函数"><a href="#通用数据读写函数" class="headerlink" title="通用数据读写函数"></a>通用数据读写函数</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;sys/socket.h&gt;</span><br><span class="line">ssize_t recvmsg ( int sockfd, struct msghdr* msg, int flags );</span><br><span class="line">ssize_t sendmsg ( int sockfd, struct msghdr* msg, int flags );</span><br></pre></td></tr></table></figure>
+<h6 id="msghdr结构体的定义"><a href="#msghdr结构体的定义" class="headerlink" title="msghdr结构体的定义"></a>msghdr结构体的定义</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">struct msghdr</span><br><span class="line">&#123;</span><br><span class="line">  void* msg_name;             /* socket 地址 */</span><br><span class="line">  socklen_t msg_namelen;      /* socket 地址的长度 */</span><br><span class="line">  struct iovec* msg_iov;      /* 分散的内存块 */</span><br><span class="line">  int msg_iovlen;             /* 分散内存块的数量 */</span><br><span class="line">  void* msg_control;          /* 指向辅助数据的起始位置 */</span><br><span class="line">  socklen_t msg_controllen;   /* 辅助数据的大小 */</span><br><span class="line">  int msg_flags;              /* 复制函数中的flags参数， 并在调用过程中更新 */</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h6 id="iovec-结构体的定义"><a href="#iovec-结构体的定义" class="headerlink" title="iovec 结构体的定义"></a>iovec 结构体的定义</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">struct iovec</span><br><span class="line">&#123;</span><br><span class="line">  void* iov_base;</span><br><span class="line">  size_t iov_len;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="外带数据"><a href="#外带数据" class="headerlink" title="外带数据"></a>外带数据</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;sys/socket.h&gt;</span><br><span class="line">int sockatmark ( int sockfd );</span><br></pre></td></tr></table></figure>
+<h3 id="地址信息函数"><a href="#地址信息函数" class="headerlink" title="地址信息函数"></a>地址信息函数</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;sys/socket.h&gt;</span><br><span class="line">/* 获取sockfd对应的本端socket地址 */</span><br><span class="line">int getsockname ( int sockfd, struct sockaddr* address, socklen_t* address_len );</span><br><span class="line">/* 获取sockfd对应的远端socket地址 */</span><br><span class="line">int getpeername ( int sockfd, struct sockaddr* address, socklen_t* address_len );</span><br></pre></td></tr></table></figure>
+<h3 id="socket选项"><a href="#socket选项" class="headerlink" title="socket选项"></a>socket选项</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;sys/socket.h&gt;</span><br><span class="line">int getsockopt( int sockfd, int level, int option_name, void* option_value );</span><br><span class="line">int setsockopt( int sockfd, int level, int option_name, const void* option_value, socklen_t option_len );</span><br></pre></td></tr></table></figure>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">网络编程</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/12/11/socketAPI/">展开全文 >></a>
         </p>
       
 
@@ -1183,6 +1188,22 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">javascript</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">异步</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">同步</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">回调</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">数据结构连载</a>
               </li>
              
@@ -1212,30 +1233,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Linux服务器</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">网络编程</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">javascript</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">异步</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">同步</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">回调</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -1304,6 +1301,14 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">mqtt</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">网络编程</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
             
             <div class="clearfix"></div>
