@@ -6,20 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="https://icbrains.cn">
-  <title>Linux网络编程API总结 | myBlog</title>
+  <title>JavaScript中的同步、异步编程 | myBlog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="通用socket地址123456#include &amp;lt;bits/socket.h&amp;gt;struct sockaddr&amp;#123;  sa_family_t sa_family;  char sa_data[14];&amp;#125;">
-<meta name="keywords" content="网络编程,Linux">
+  <meta name="description" content="同步所有的事件是按照顺序执行的，后面的任务只能等待前面的任务弯沉之后才能够执行，同步其实就是链式执行； 异步异步表示消息不是按照先后顺序去执行，当一个函数收到一个执行消息之后，它可能需要很长一段时间才能执行完毕，如果是同步的话，后面的任务就只能一直等待，直到前面的任务完后，有可能造成了假死现象，但是使用异步的话就不会出现这样的事情，异步的话处理逻辑的过程和返回结果的过程是分开的，并不会影响后续任">
+<meta name="keywords" content="javascript,异步,同步">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Linux网络编程API总结">
-<meta property="og:url" content="https://icbrains.cn/2018/12/03/socketAPI/index.html">
+<meta property="og:title" content="JavaScript中的同步、异步编程">
+<meta property="og:url" content="https://icbrains.cn/2018/12/11/asyncForjs/index.html">
 <meta property="og:site_name" content="myBlog">
-<meta property="og:description" content="通用socket地址123456#include &amp;lt;bits/socket.h&amp;gt;struct sockaddr&amp;#123;  sa_family_t sa_family;  char sa_data[14];&amp;#125;">
+<meta property="og:description" content="同步所有的事件是按照顺序执行的，后面的任务只能等待前面的任务弯沉之后才能够执行，同步其实就是链式执行； 异步异步表示消息不是按照先后顺序去执行，当一个函数收到一个执行消息之后，它可能需要很长一段时间才能执行完毕，如果是同步的话，后面的任务就只能一直等待，直到前面的任务完后，有可能造成了假死现象，但是使用异步的话就不会出现这样的事情，异步的话处理逻辑的过程和返回结果的过程是分开的，并不会影响后续任">
 <meta property="og:locale" content="汉语">
-<meta property="og:updated_time" content="2018-12-03T01:35:09.829Z">
+<meta property="og:updated_time" content="2018-12-11T05:47:44.457Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Linux网络编程API总结">
-<meta name="twitter:description" content="通用socket地址123456#include &amp;lt;bits/socket.h&amp;gt;struct sockaddr&amp;#123;  sa_family_t sa_family;  char sa_data[14];&amp;#125;">
+<meta name="twitter:title" content="JavaScript中的同步、异步编程">
+<meta name="twitter:description" content="同步所有的事件是按照顺序执行的，后面的任务只能等待前面的任务弯沉之后才能够执行，同步其实就是链式执行； 异步异步表示消息不是按照先后顺序去执行，当一个函数收到一个执行消息之后，它可能需要很长一段时间才能执行完毕，如果是同步的话，后面的任务就只能一直等待，直到前面的任务完后，有可能造成了假死现象，但是使用异步的话就不会出现这样的事情，异步的话处理逻辑的过程和返回结果的过程是分开的，并不会影响后续任">
   
     <link rel="alternative" href="/atom.xml" title="myBlog" type="application/atom+xml">
   
@@ -155,46 +155,41 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-socketAPI" class="article article-type-post " itemscope="" itemprop="blogPost">
+            <article id="post-asyncForjs" class="article article-type-post " itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      Linux网络编程API总结
+      JavaScript中的同步、异步编程
     </h1>
   
 
         
-        <a href="/2018/12/03/socketAPI/" class="archive-article-date">
-  	<time datetime="2018-12-03T01:35:09.829Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-03</time>
+        <a href="/2018/12/11/asyncForjs/" class="archive-article-date">
+  	<time datetime="2018-12-11T05:47:44.457Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-11</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="通用socket地址"><a href="#通用socket地址" class="headerlink" title="通用socket地址"></a>通用socket地址</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;bits/socket.h&gt;</span><br><span class="line">struct sockaddr</span><br><span class="line">&#123;</span><br><span class="line">  sa_family_t sa_family;</span><br><span class="line">  char sa_data[14];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<a id="more"></a>
-<h3 id="专用socket地址"><a href="#专用socket地址" class="headerlink" title="专用socket地址"></a>专用socket地址</h3><h6 id="unix本地域协议族专用socket地址结构体"><a href="#unix本地域协议族专用socket地址结构体" class="headerlink" title="unix本地域协议族专用socket地址结构体"></a>unix本地域协议族专用socket地址结构体</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;sys/un.h&gt;</span><br><span class="line">struct sockaddr_un</span><br><span class="line">&#123;</span><br><span class="line">  sa_family_t sin_family;</span><br><span class="line">  char sun_path [108];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h6 id="TCP-IP协议族的专用socket地址IPV4"><a href="#TCP-IP协议族的专用socket地址IPV4" class="headerlink" title="TCP/IP协议族的专用socket地址IPV4"></a>TCP/IP协议族的专用socket地址IPV4</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">struct sockaddr_in</span><br><span class="line">&#123;</span><br><span class="line">  sa_family_t sin_family;</span><br><span class="line">  u_int16_t sin_port;</span><br><span class="line">  struct in_addr sin_addr;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">struct sin_addr</span><br><span class="line">&#123;</span><br><span class="line">  u_int32_t s_addr;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<h6 id="TCP-IP协议族的专用socket地址IPV6"><a href="#TCP-IP协议族的专用socket地址IPV6" class="headerlink" title="TCP/IP协议族的专用socket地址IPV6"></a>TCP/IP协议族的专用socket地址IPV6</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">struct sockaddr_in6</span><br><span class="line">&#123;</span><br><span class="line">  sa_family_t sin6_family;</span><br><span class="line">  u_int16_t sin6_port;</span><br><span class="line">  u_int32_t sin6_flowinfo;</span><br><span class="line">  struct int6_addr sin6_addr;</span><br><span class="line">  u_int32_t sin6_scope_id;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">struct in6s_addr</span><br><span class="line">&#123;</span><br><span class="line">  unsinged char sa_addr[16];</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<h3 id="IP地址转换函数"><a href="#IP地址转换函数" class="headerlink" title="IP地址转换函数"></a>IP地址转换函数</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;arpa/inet.h&gt;</span><br><span class="line">//将用点分十进制字符串表示的IPV4地址转化为网络字节序整数表示的IPV4</span><br><span class="line">in_addr_t inet_addr( const char* strptr );</span><br><span class="line">int inet_aton ( const char* cp,struct in_addr* inp );</span><br><span class="line">char* inet_ntoa ( struct in_addr in );</span><br></pre></td></tr></table></figure>
-<h3 id="创建socket的API"><a href="#创建socket的API" class="headerlink" title="创建socket的API"></a>创建socket的API</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;sys/types.h&gt;</span><br><span class="line">#include &lt;sys/socket.h&gt;</span><br><span class="line">int socket( int domain, int type, int protocol );</span><br></pre></td></tr></table></figure>
-<h3 id="命名socket"><a href="#命名socket" class="headerlink" title="命名socket"></a>命名socket</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;sys/types.h&gt;</span><br><span class="line">#include &lt;sys/socket.h&gt;</span><br><span class="line">int bind ( int sockfd, const struct sockaddr* my_addr, socklen_t addrlen );</span><br></pre></td></tr></table></figure>
-<h3 id="监听socket"><a href="#监听socket" class="headerlink" title="监听socket"></a>监听socket</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;sys/socket.h&gt;</span><br><span class="line">int listen ( int sockfd, int backlog );</span><br></pre></td></tr></table></figure>
-<h3 id="接受连接"><a href="#接受连接" class="headerlink" title="接受连接"></a>接受连接</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;sys/types.h&gt;</span><br><span class="line">#include &lt;sys/socket.h&gt;</span><br><span class="line">int accept( int sockfd, sockaddr* addr, socklen_t*addrlen);</span><br></pre></td></tr></table></figure>
-<h3 id="发起连接【一般表示socket客户端的行为】"><a href="#发起连接【一般表示socket客户端的行为】" class="headerlink" title="发起连接【一般表示socket客户端的行为】"></a>发起连接【一般表示socket客户端的行为】</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;sys/types.h&gt;</span><br><span class="line">#include &lt;sys/socket.h&gt;</span><br><span class="line">sockfd：socket系统调用返回一个socket</span><br><span class="line">serv_addr：服务器监听的socket地址</span><br><span class="line">addrlen：指定这个地址的长度</span><br><span class="line">int connect (int sockfd, const struct sockaddr* serv_addr, socklen_t addrlen );</span><br></pre></td></tr></table></figure>
-<h3 id="关闭连接"><a href="#关闭连接" class="headerlink" title="关闭连接"></a>关闭连接</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line">int close ( int fd );</span><br></pre></td></tr></table></figure>
-<h3 id="数据读写"><a href="#数据读写" class="headerlink" title="数据读写"></a>数据读写</h3><h6 id="TCP数据读写"><a href="#TCP数据读写" class="headerlink" title="TCP数据读写"></a>TCP数据读写</h6><p>对文件的读写操作read和write同样适用于socket<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;sys/types.h&gt;</span><br><span class="line">#include &lt;sys/socket.h&gt;</span><br><span class="line">ssize_t recv ( int sockfd, void* buf, ssize_t len, int flags );</span><br><span class="line">ssize_t send ( int sockfd, const void* buf, size_t len, int flags );</span><br></pre></td></tr></table></figure></p>
-<h6 id="UDP数据读写"><a href="#UDP数据读写" class="headerlink" title="UDP数据读写"></a>UDP数据读写</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;sys/types.h&gt;</span><br><span class="line">#include &lt;sys/socket.h&gt;</span><br><span class="line">ssize_t recvfrom ( int sockfd, void* buf, size_t len, int flag, struct sockaddr* src_addr, socklen_t* addrlen );</span><br><span class="line">ssize_t sendto( int sockfd, const void* buf, size_t len, int flags, const struct sockaddr* dest_addr, socklen_t addrlen );</span><br></pre></td></tr></table></figure>
-<h3 id="通用数据读写函数"><a href="#通用数据读写函数" class="headerlink" title="通用数据读写函数"></a>通用数据读写函数</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;sys/socket.h&gt;</span><br><span class="line">ssize_t recvmsg ( int sockfd, struct msghdr* msg, int flags );</span><br><span class="line">ssize_t sendmsg ( int sockfd, struct msghdr* msg, int flags );</span><br></pre></td></tr></table></figure>
-<h6 id="msghdr结构体的定义"><a href="#msghdr结构体的定义" class="headerlink" title="msghdr结构体的定义"></a>msghdr结构体的定义</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">struct msghdr</span><br><span class="line">&#123;</span><br><span class="line">  void* msg_name;             /* socket 地址 */</span><br><span class="line">  socklen_t msg_namelen;      /* socket 地址的长度 */</span><br><span class="line">  struct iovec* msg_iov;      /* 分散的内存块 */</span><br><span class="line">  int msg_iovlen;             /* 分散内存块的数量 */</span><br><span class="line">  void* msg_control;          /* 指向辅助数据的起始位置 */</span><br><span class="line">  socklen_t msg_controllen;   /* 辅助数据的大小 */</span><br><span class="line">  int msg_flags;              /* 复制函数中的flags参数， 并在调用过程中更新 */</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<h6 id="iovec-结构体的定义"><a href="#iovec-结构体的定义" class="headerlink" title="iovec 结构体的定义"></a>iovec 结构体的定义</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">struct iovec</span><br><span class="line">&#123;</span><br><span class="line">  void* iov_base;</span><br><span class="line">  size_t iov_len;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-<h3 id="外带数据"><a href="#外带数据" class="headerlink" title="外带数据"></a>外带数据</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;sys/socket.h&gt;</span><br><span class="line">int sockatmark ( int sockfd );</span><br></pre></td></tr></table></figure>
-<h3 id="地址信息函数"><a href="#地址信息函数" class="headerlink" title="地址信息函数"></a>地址信息函数</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;sys/socket.h&gt;</span><br><span class="line">/* 获取sockfd对应的本端socket地址 */</span><br><span class="line">int getsockname ( int sockfd, struct sockaddr* address, socklen_t* address_len );</span><br><span class="line">/* 获取sockfd对应的远端socket地址 */</span><br><span class="line">int getpeername ( int sockfd, struct sockaddr* address, socklen_t* address_len );</span><br></pre></td></tr></table></figure>
-<h3 id="socket选项"><a href="#socket选项" class="headerlink" title="socket选项"></a>socket选项</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;sys/socket.h&gt;</span><br><span class="line">int getsockopt( int sockfd, int level, int option_name, void* option_value );</span><br><span class="line">int setsockopt( int sockfd, int level, int option_name, const void* option_value, socklen_t option_len );</span><br></pre></td></tr></table></figure>
+        <a id="more"></a>
+<h3 id="同步"><a href="#同步" class="headerlink" title="同步"></a>同步</h3><p>所有的事件是按照顺序执行的，后面的任务只能等待前面的任务弯沉之后才能够执行，同步其实就是链式执行；</p>
+<h3 id="异步"><a href="#异步" class="headerlink" title="异步"></a>异步</h3><p>异步表示消息不是按照先后顺序去执行，当一个函数收到一个执行消息之后，它可能需要很长一段时间才能执行完毕，如果是同步的话，后面的任务就只能一直等待，直到前面的任务完后，有可能造成了假死现象，但是使用异步的话就不会出现这样的事情，异步的话处理逻辑的过程和返回结果的过程是分开的，并不会影响后续任务的继续执行。</p>
+<h3 id="JavaScript中异步的实现方案"><a href="#JavaScript中异步的实现方案" class="headerlink" title="JavaScript中异步的实现方案"></a>JavaScript中异步的实现方案</h3><ul>
+<li>回调函数</li>
+</ul>
+<ul>
+<li>事件监听</li>
+</ul>
+<ul>
+<li>订阅者模式:subscribe/publis</li>
+</ul>
+<ul>
+<li>Promise</li>
+</ul>
 
       
 
@@ -208,11 +203,15 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">网络编程</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">javascript</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">Linux</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">异步</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">同步</a>
         		</li>
       		
 		</ul>
@@ -268,7 +267,7 @@
     <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=https://icbrains.cn/2018/12/03/socketAPI/" alt="微信分享二维码">
+      <img src="//pan.baidu.com/share/qrcode?url=https://icbrains.cn/2018/12/11/asyncForjs/" alt="微信分享二维码">
     </div>
 </div>
 
@@ -282,18 +281,18 @@
   
 <nav id="article-nav">
   
-    <a href="/2018/12/03/hello-world/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2018/12/11/callback/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          欢迎大家！
+          JavaScript的回调
         
       </div>
     </a>
   
   
-    <a href="/2018/12/02/ioframework/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">高性能服务器框架</div>
+    <a href="/2018/12/03/announce/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">announce</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -319,6 +318,26 @@
 
 
   
+  <div class="duoshuo">
+	<!-- 多说评论框 start -->
+	<div class="ds-thread" data-thread-key="asyncForjs" data-title="JavaScript中的同步、异步编程" data-url="https://icbrains.cn/2018/12/11/asyncForjs/"></div>
+	<!-- 多说评论框 end -->
+	<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+	<script type="text/javascript">
+	var duoshuoQuery = {short_name:"true"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		 || document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+	<!-- 多说公共JS代码 end -->
+</div>
+
+  
   
   
 
@@ -335,15 +354,16 @@
       <footer id="footer">
   <div class="outer">
     <div id="footer-info">
-    	<div class="footer-left">
+    	<div class="footer-center">
     		&copy; 2018 bao Yabin
     	</div>
-      	<div class="footer-right">
+      	<!-- <div class="footer-right">
       		<a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/litten/hexo-theme-yilia" target="_blank">Yilia</a> by Litten
-      	</div>
+      	</div> -->
     </div>
   </div>
 </footer>
+
     </div>
     <script>
 	var yiliaConfig = {
@@ -457,6 +477,90 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color1">Linux</a>
               </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">javascript</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">异步</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">同步</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">回调</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">note</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">cpp</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">c++知识点</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">pomelo</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">nodejs</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">es6</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">promise</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">protobuf</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">TCP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">UDP</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">http</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">https</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">websocket</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">websocket ss</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">socket.io</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">socket.io ss</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color5">mqtt</a>
+              </li>
             
             <div class="clearfix"></div>
           </ul>
@@ -534,7 +638,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
     
     	<section class="tools-section tools-section-me" q-show="aboutme">
   	  	
-  	  		<div class="aboutme-wrap" id="js-aboutme">欢迎朋友们&lt;br&gt;&amp;nbsp;&amp;nbsp;本人是从事软件开发的在职人员，有什么需要我帮助的请私信我；&lt;br&gt;&amp;nbsp;&amp;nbsp;Email：1113938026@qq.com&lt;br&gt;&amp;nbsp;&amp;nbsp;谢谢大家来我这儿，希望我们通过网络互相共勉！</div>
+  	  		<div class="aboutme-wrap" id="js-aboutme">欢迎朋友们!本人是从事软件开发的在职人员，有什么需要我帮助的请私信我；Email：1113938026@qq.com;谢谢大家来我这儿，希望我们通过网络互相共勉！</div>
   	  	
     	</section>
     
