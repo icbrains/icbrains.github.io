@@ -8,18 +8,18 @@
   <link rel="dns-prefetch" href="https://icbrains.cn">
   <title>高级I/O函数 | myBlog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="pipe 函数12#include &amp;lt;unistd.h&amp;gt;int pipe ( int fd[2]); dup函数和dup2函数123#include &amp;lt;unistd.h&amp;gt;int dup ( int file_descriptor );int dup2 ( int file_descriptor, int file_descriptor_two ); readv函数和wri">
+  <meta name="description" content="pipe 函数">
 <meta name="keywords" content="io,函数">
 <meta property="og:type" content="article">
 <meta property="og:title" content="高级I&#x2F;O函数">
 <meta property="og:url" content="https://icbrains.cn/2018/12/02/io/index.html">
 <meta property="og:site_name" content="myBlog">
-<meta property="og:description" content="pipe 函数12#include &amp;lt;unistd.h&amp;gt;int pipe ( int fd[2]); dup函数和dup2函数123#include &amp;lt;unistd.h&amp;gt;int dup ( int file_descriptor );int dup2 ( int file_descriptor, int file_descriptor_two ); readv函数和wri">
+<meta property="og:description" content="pipe 函数">
 <meta property="og:locale" content="汉语">
-<meta property="og:updated_time" content="2018-12-11T05:54:19.257Z">
+<meta property="og:updated_time" content="2018-12-11T06:27:08.297Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="高级I&#x2F;O函数">
-<meta name="twitter:description" content="pipe 函数12#include &amp;lt;unistd.h&amp;gt;int pipe ( int fd[2]); dup函数和dup2函数123#include &amp;lt;unistd.h&amp;gt;int dup ( int file_descriptor );int dup2 ( int file_descriptor, int file_descriptor_two ); readv函数和wri">
+<meta name="twitter:description" content="pipe 函数">
   
     <link rel="alternative" href="/atom.xml" title="myBlog" type="application/atom+xml">
   
@@ -60,7 +60,7 @@
 			
 				<li><a href="/">主页</a></li>
 	        
-				<li><a href="/tags/随笔/">随笔</a></li>
+				<li><a href="/tags/随笔/pomelo">随笔</a></li>
 	        
 			</ul>
 		</nav>
@@ -140,7 +140,7 @@
 				
 					<li style="width: 50%"><a href="/">主页</a></li>
 		        
-					<li style="width: 50%"><a href="/tags/随笔/">随笔</a></li>
+					<li style="width: 50%"><a href="/tags/随笔/pomelo">随笔</a></li>
 		        
 				</ul>
 			</nav>
@@ -175,8 +175,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <a id="more"></a>
-<h3 id="pipe-函数"><a href="#pipe-函数" class="headerlink" title="pipe 函数"></a>pipe 函数</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line">int pipe ( int fd[2]);</span><br></pre></td></tr></table></figure>
+        <h3 id="pipe-函数"><a href="#pipe-函数" class="headerlink" title="pipe 函数"></a>pipe 函数</h3><a id="more"></a>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line">int pipe ( int fd[2]);</span><br></pre></td></tr></table></figure>
 <h3 id="dup函数和dup2函数"><a href="#dup函数和dup2函数" class="headerlink" title="dup函数和dup2函数"></a>dup函数和dup2函数</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;unistd.h&gt;</span><br><span class="line">int dup ( int file_descriptor );</span><br><span class="line">int dup2 ( int file_descriptor, int file_descriptor_two );</span><br></pre></td></tr></table></figure>
 <h3 id="readv函数和writev函数"><a href="#readv函数和writev函数" class="headerlink" title="readv函数和writev函数"></a>readv函数和writev函数</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;sys/uio.h&gt;</span><br><span class="line">ssize_t readv( int fd, const struct iovec* vector, int count );</span><br><span class="line">ssize_t writev( int fd, const struct iovec* vector, int count );</span><br></pre></td></tr></table></figure>
 <h3 id="sendfile函数"><a href="#sendfile函数" class="headerlink" title="sendfile函数"></a>sendfile函数</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#include &lt;sys/sendfile.h&gt;</span><br><span class="line">ssize_t sendfile( int out_fd, int in_fd, off_t* offset, size_t count );</span><br></pre></td></tr></table></figure>
@@ -433,15 +433,23 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">回调</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">异步</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">同步</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">回调</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">数据结构连载</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">顺序表</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -453,11 +461,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">数据结构连载</a>
+                <a href="javascript:void(0)" class="js-tag color3">io</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">顺序表</a>
+                <a href="javascript:void(0)" class="js-tag color3">函数</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -486,14 +494,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">nodejs</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">io</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">函数</a>
               </li>
              
               <li class="article-tag-list-item">

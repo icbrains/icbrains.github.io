@@ -8,18 +8,18 @@
   <link rel="dns-prefetch" href="https://icbrains.cn">
   <title>JavaScript中的同步、异步编程 | myBlog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="同步所有的事件是按照顺序执行的，后面的任务只能等待前面的任务弯沉之后才能够执行，同步其实就是链式执行； 异步异步表示消息不是按照先后顺序去执行，当一个函数收到一个执行消息之后，它可能需要很长一段时间才能执行完毕，如果是同步的话，后面的任务就只能一直等待，直到前面的任务完后，有可能造成了假死现象，但是使用异步的话就不会出现这样的事情，异步的话处理逻辑的过程和返回结果的过程是分开的，并不会影响后续任">
+  <meta name="description" content="同步">
 <meta name="keywords" content="javascript,异步,同步">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JavaScript中的同步、异步编程">
 <meta property="og:url" content="https://icbrains.cn/2018/12/11/asyncForjs/index.html">
 <meta property="og:site_name" content="myBlog">
-<meta property="og:description" content="同步所有的事件是按照顺序执行的，后面的任务只能等待前面的任务弯沉之后才能够执行，同步其实就是链式执行； 异步异步表示消息不是按照先后顺序去执行，当一个函数收到一个执行消息之后，它可能需要很长一段时间才能执行完毕，如果是同步的话，后面的任务就只能一直等待，直到前面的任务完后，有可能造成了假死现象，但是使用异步的话就不会出现这样的事情，异步的话处理逻辑的过程和返回结果的过程是分开的，并不会影响后续任">
+<meta property="og:description" content="同步">
 <meta property="og:locale" content="汉语">
-<meta property="og:updated_time" content="2018-12-11T05:47:44.457Z">
+<meta property="og:updated_time" content="2018-12-11T06:26:17.069Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JavaScript中的同步、异步编程">
-<meta name="twitter:description" content="同步所有的事件是按照顺序执行的，后面的任务只能等待前面的任务弯沉之后才能够执行，同步其实就是链式执行； 异步异步表示消息不是按照先后顺序去执行，当一个函数收到一个执行消息之后，它可能需要很长一段时间才能执行完毕，如果是同步的话，后面的任务就只能一直等待，直到前面的任务完后，有可能造成了假死现象，但是使用异步的话就不会出现这样的事情，异步的话处理逻辑的过程和返回结果的过程是分开的，并不会影响后续任">
+<meta name="twitter:description" content="同步">
   
     <link rel="alternative" href="/atom.xml" title="myBlog" type="application/atom+xml">
   
@@ -60,7 +60,7 @@
 			
 				<li><a href="/">主页</a></li>
 	        
-				<li><a href="/tags/随笔/">随笔</a></li>
+				<li><a href="/tags/随笔/pomelo">随笔</a></li>
 	        
 			</ul>
 		</nav>
@@ -140,7 +140,7 @@
 				
 					<li style="width: 50%"><a href="/">主页</a></li>
 		        
-					<li style="width: 50%"><a href="/tags/随笔/">随笔</a></li>
+					<li style="width: 50%"><a href="/tags/随笔/pomelo">随笔</a></li>
 		        
 				</ul>
 			</nav>
@@ -168,15 +168,15 @@
 
         
         <a href="/2018/12/11/asyncForjs/" class="archive-article-date">
-  	<time datetime="2018-12-11T05:47:44.457Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-11</time>
+  	<time datetime="2018-12-11T06:26:17.069Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-12-11</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <a id="more"></a>
-<h3 id="同步"><a href="#同步" class="headerlink" title="同步"></a>同步</h3><p>所有的事件是按照顺序执行的，后面的任务只能等待前面的任务弯沉之后才能够执行，同步其实就是链式执行；</p>
+        <h3 id="同步"><a href="#同步" class="headerlink" title="同步"></a>同步</h3><a id="more"></a>
+<p>所有的事件是按照顺序执行的，后面的任务只能等待前面的任务弯沉之后才能够执行，同步其实就是链式执行；</p>
 <h3 id="异步"><a href="#异步" class="headerlink" title="异步"></a>异步</h3><p>异步表示消息不是按照先后顺序去执行，当一个函数收到一个执行消息之后，它可能需要很长一段时间才能执行完毕，如果是同步的话，后面的任务就只能一直等待，直到前面的任务完后，有可能造成了假死现象，但是使用异步的话就不会出现这样的事情，异步的话处理逻辑的过程和返回结果的过程是分开的，并不会影响后续任务的继续执行。</p>
 <h3 id="JavaScript中异步的实现方案"><a href="#JavaScript中异步的实现方案" class="headerlink" title="JavaScript中异步的实现方案"></a>JavaScript中异步的实现方案</h3><ul>
 <li>回调函数</li>
@@ -281,11 +281,11 @@
   
 <nav id="article-nav">
   
-    <a href="/2018/12/11/socketAPI/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2018/12/11/callback/" id="article-nav-newer" class="article-nav-link-wrap">
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          Linux网络编程API总结
+          JavaScript的回调
         
       </div>
     </a>
@@ -443,15 +443,23 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">回调</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">异步</a>
               </li>
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">同步</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">回调</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">数据结构连载</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">顺序表</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -463,11 +471,11 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">数据结构连载</a>
+                <a href="javascript:void(0)" class="js-tag color3">io</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">顺序表</a>
+                <a href="javascript:void(0)" class="js-tag color3">函数</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -496,14 +504,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">nodejs</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">io</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">函数</a>
               </li>
              
               <li class="article-tag-list-item">
